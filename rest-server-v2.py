@@ -1,4 +1,4 @@
-#!flask/bin/python
+#!/usr/bin/env python3
 
 """Alternative version of the ToDo RESTful server implemented using the
 Flask-RESTful extension."""
@@ -55,7 +55,7 @@ class TaskListAPI(Resource):
         super(TaskListAPI, self).__init__()
         
     def get(self):
-        return { 'tasks': map(lambda t: marshal(t, task_fields), tasks) }
+        return { 'tasks': list(map(lambda t: marshal(t, task_fields), tasks)) }
 
     def post(self):
         args = self.reqparse.parse_args()
@@ -79,7 +79,7 @@ class TaskAPI(Resource):
         super(TaskAPI, self).__init__()
 
     def get(self, id):
-        task = filter(lambda t: t['id'] == id, tasks)
+        task = list(filter(lambda t: t['id'] == id, tasks))
         if len(task) == 0:
             abort(404)
         return { 'task': marshal(task[0], task_fields) }
